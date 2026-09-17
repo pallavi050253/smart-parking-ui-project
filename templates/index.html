@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Parking Analyzer</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head><body><main class="wrap">
+<header><div class="tag">COMPUTER VISION PROJECT</div>
+<h1>Smart Parking Space Analyzer</h1>
+<p>Upload a parking-lot image and analyze space occupancy.</p></header>
+
+<section class="card">
+<form method="post" enctype="multipart/form-data">
+<label class="drop"><input type="file" name="image" accept="image/*" required>
+<span>📷 Choose parking image</span><small>JPG, JPEG or PNG</small></label>
+<button type="submit">Analyze Parking</button>
+</form>
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+</section>
+
+{% if result %}
+<section class="stats">
+<div><span>Total Spaces</span><strong>{{result.total}}</strong></div>
+<div><span>Occupied</span><strong>{{result.occupied}}</strong></div>
+<div><span>Vacant</span><strong>{{result.vacant}}</strong></div>
+<div><span>Occupancy</span><strong>{{result.occupancy}}%</strong></div>
+</section>
+<section class="card result">
+<div><h2>Analyzed Parking Area</h2>
+<img src="{{url_for('results',filename=result.image)}}" alt="Annotated parking result"></div>
+<div><h2>Space Status</h2><div class="grid">
+{% for item in result.details %}
+<div class="space {{'occupied' if item.status=='OCCUPIED' else 'vacant'}}">
+<b>{{item.id}}</b><span>{{item.status}}</span></div>
+{% endfor %}</div></div>
+</section>
+{% endif %}
+<footer>Python • Flask • OpenCV • Computer Vision</footer>
+</main></body></html>
